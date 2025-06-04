@@ -89,7 +89,7 @@
 </head>
 <body class="bg-slate-100 flex items-center justify-center min-h-screen p-4 py-8">
 
-    <div class="bg-white p-6 md:p-8 rounded-xl shadow-2xl w-full max-w-3xl"> {/* Augmentation de max-w */}
+    <div class="bg-white p-6 md:p-8 rounded-xl shadow-2xl w-full max-w-3xl">
         <h1 class="text-2xl md:text-3xl font-bold text-center text-sky-700 mb-2">Calculateur de Virements (Finalisé)</h1>
         <p class="text-slate-600 text-center mb-6 text-sm md:text-base">
             Planifiez vos finances avec épargne automatique, fonds de roulement et bilan mensuel.
@@ -102,11 +102,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                     <div>
                         <label for="soldeActuelMari" class="block text-sm font-medium text-slate-700 mb-1">Solde actuel compte Monsieur (€)</label>
-                        <input type="number" id="soldeActuelMari" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Ex: 500" required>
+                        <input type="number" id="soldeActuelMari" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Entrez le solde" required>
                     </div>
                     <div>
                         <label for="soldeActuelFemme" class="block text-sm font-medium text-slate-700 mb-1">Solde actuel compte Madame (€)</label>
-                        <input type="number" id="soldeActuelFemme" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Ex: 450" required>
+                        <input type="number" id="soldeActuelFemme" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Entrez le solde" required>
                     </div>
                     <div>
                         <label for="epargneAutoMari" class="block text-sm font-medium text-slate-700 mb-1">Épargne auto. Monsieur (€)</label>
@@ -124,23 +124,23 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-5 mt-2">
                     <div>
                         <label for="salaireMari" class="block text-sm font-medium text-slate-700 mb-1">Salaire de Monsieur (€)</label>
-                        <input type="number" id="salaireMari" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Ex: 2500" required>
+                        <input type="number" id="salaireMari" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Entrez le salaire" required>
                     </div>
                     <div>
                         <label for="salaireFemme" class="block text-sm font-medium text-slate-700 mb-1">Salaire de Madame (€)</label>
-                        <input type="number" id="salaireFemme" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Ex: 2200" required>
+                        <input type="number" id="salaireFemme" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Entrez le salaire" required>
                     </div>
                     <div>
                         <label for="depensesCarteMari" class="block text-sm font-medium text-slate-700 mb-1">Dépenses carte Monsieur (€)</label>
-                        <input type="number" id="depensesCarteMari" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Ex: 300" required>
+                        <input type="number" id="depensesCarteMari" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Entrez les dépenses" required>
                     </div>
                     <div>
                         <label for="depensesCarteFemme" class="block text-sm font-medium text-slate-700 mb-1">Dépenses carte Madame (€)</label>
-                        <input type="number" id="depensesCarteFemme" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Ex: 250" required>
+                        <input type="number" id="depensesCarteFemme" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Entrez les dépenses" required>
                     </div>
                      <div class="md:col-span-2">
                         <label for="depensesCrecheFemme" class="block text-sm font-medium text-slate-700 mb-1">Dépenses Crèche (payées par Madame) (€)</label>
-                        <input type="number" id="depensesCrecheFemme" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Ex: 400" required>
+                        <input type="number" id="depensesCrecheFemme" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Entrez le montant" required>
                     </div>
                 </div>
             </fieldset>
@@ -150,21 +150,21 @@
                 <div class="space-y-4 mt-2">
                     <div>
                         <label for="depensesFixesCommunes" class="block text-sm font-medium text-slate-700 mb-1">Dépenses fixes communes mensuelles (€)</label>
-                        <input type="number" id="depensesFixesCommunes" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" value="1900" placeholder="Ex: 1900" required>
+                        <input type="number" id="depensesFixesCommunes" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" value="1900" required>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label for="depensesCarteCommuneMari" class="block text-sm font-medium text-slate-700 mb-1">Dépenses carte commune Monsieur (€)</label>
-                            <input type="number" id="depensesCarteCommuneMari" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Ex: 100" required>
+                            <input type="number" id="depensesCarteCommuneMari" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Entrez les dépenses" required>
                         </div>
                         <div>
                             <label for="depensesCarteCommuneFemme" class="block text-sm font-medium text-slate-700 mb-1">Dépenses carte commune Madame (€)</label>
-                            <input type="number" id="depensesCarteCommuneFemme" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Ex: 80" required>
+                            <input type="number" id="depensesCarteCommuneFemme" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Entrez les dépenses" required>
                         </div>
                     </div>
                      <div>
                         <label for="objectifSoldeCommun" class="block text-sm font-medium text-slate-700 mb-1">Objectif solde minimum compte commun (€)</label>
-                        <input type="number" id="objectifSoldeCommun" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" value="300" placeholder="Ex: 300" required>
+                        <input type="number" id="objectifSoldeCommun" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" value="300" required>
                         <p class="text-xs text-slate-500 mt-1">Fonds de roulement souhaité sur le compte commun.</p>
                     </div>
                 </div>
@@ -413,3 +413,4 @@
 
 </body>
 </html>
+
