@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur de Virement Mensuel (Finalisé avec Détails)</title>
+    <!-- Importation de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Utilisation de la police Inter */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        input::placeholder {
+            color: #9ca3af; /* gray-400 */
+        }
+        /* Style pour les résultats détaillés */
+        .result-section {
+            border-top: 1px solid #e5e7eb; /* gray-200 */
+            padding-top: 0.75rem; /* pt-3 */
+            margin-top: 0.75rem; /* mt-3 */
+        }
+        .result-label {
+            font-weight: 500; /* medium */
+            color: #374151; /* gray-700 */
+        }
+        .result-value {
+            font-weight: 700; /* bold */
+        }
+        .positive-value {
+            color: #16a34a; /* green-600 */
+        }
+        .negative-value {
+            color: #dc2626; /* red-600 */
+        }
+        .warning-value {
+            color: #f59e0b; /* amber-500 */
+        }
+        .info-value {
+            color: #3b82f6; /* blue-500 */
+        }
+        /* Style pour surligner les actions de virement */
+        .action-highlight {
+            background-color: #fef9c3; /* yellow-100 */
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600; /* semibold */
+            border: 1px solid #facc15; /* yellow-500 */
+            display: inline-block; /* Pour que le padding et la bordure s'appliquent correctement */
+        }
+        /* Styles pour les onglets */
+        .tab-button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem 0.375rem 0 0; /* rounded-t-md */
+            font-weight: 500; /* medium */
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+            border: 1px solid transparent;
+            border-bottom: none;
+        }
+        .tab-button.active {
+            background-color: #fff; /* white */
+            color: #0ea5e9; /* sky-600 */
+            border-color: #e5e7eb; /* gray-200 */
+            border-bottom: 1px solid #fff;
+            position: relative;
+            top: 1px;
+        }
+        .tab-button:not(.active) {
+            background-color: #f3f4f6; /* gray-100 */
+            color: #6b7280; /* gray-500 */
+            border-color: #e5e7eb;
+        }
+        .tab-content {
+            border: 1px solid #e5e7eb; /* gray-200 */
+            border-top: none;
+            padding: 1rem;
+            background-color: #fff;
+            border-radius: 0 0 0.375rem 0.375rem; /* rounded-b-md */
+        }
+        .detail-list { margin-left: 1rem; }
+        .detail-list li { margin-bottom: 0.25rem; }
+        .detail-title { font-weight: 600; color: #1f2937; margin-top:0.5rem; } /* gray-800 */
+    </style>
+    <!-- Importation de la police Inter depuis Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-100 flex items-center justify-center min-h-screen p-4 py-8">
+
+    <div class="bg-white p-6 md:p-8 rounded-xl shadow-2xl w-full max-w-3xl"> {/* Augmentation de max-w */}
+        <h1 class="text-2xl md:text-3xl font-bold text-center text-sky-700 mb-2">Calculateur de Virements (Finalisé)</h1>
+        <p class="text-slate-600 text-center mb-6 text-sm md:text-base">
+            Planifiez vos finances avec épargne automatique, fonds de roulement et bilan mensuel.
+        </p>
+
+        <form id="transferForm" class="space-y-5">
+            
+            <fieldset class="border border-slate-300 p-4 rounded-lg">
+                <legend class="text-lg font-semibold text-slate-800 px-2">Soldes Actuels & Épargne Automatique</legend>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                    <div>
+                        <label for="soldeActuelMari" class="block text-sm font-medium text-slate-700 mb-1">Solde actuel compte Monsieur (€)</label>
+                        <input type="number" id="soldeActuelMari" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Ex: 500" required>
+                    </div>
+                    <div>
+                        <label for="soldeActuelFemme" class="block text-sm font-medium text-slate-700 mb-1">Solde actuel compte Madame (€)</label>
+                        <input type="number" id="soldeActuelFemme" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Ex: 450" required>
+                    </div>
+                    <div>
+                        <label for="epargneAutoMari" class="block text-sm font-medium text-slate-700 mb-1">Épargne auto. Monsieur (€)</label>
+                        <input type="number" id="epargneAutoMari" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" value="350" required>
+                    </div>
+                    <div>
+                        <label for="epargneAutoFemme" class="block text-sm font-medium text-slate-700 mb-1">Épargne auto. Madame (€)</label>
+                        <input type="number" id="epargneAutoFemme" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" value="200" required>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="border border-slate-300 p-4 rounded-lg">
+                <legend class="text-lg font-semibold text-slate-800 px-2">Salaires & Dépenses Individuelles Courantes</legend>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-5 mt-2">
+                    <div>
+                        <label for="salaireMari" class="block text-sm font-medium text-slate-700 mb-1">Salaire de Monsieur (€)</label>
+                        <input type="number" id="salaireMari" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Ex: 2500" required>
+                    </div>
+                    <div>
+                        <label for="salaireFemme" class="block text-sm font-medium text-slate-700 mb-1">Salaire de Madame (€)</label>
+                        <input type="number" id="salaireFemme" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Ex: 2200" required>
+                    </div>
+                    <div>
+                        <label for="depensesCarteMari" class="block text-sm font-medium text-slate-700 mb-1">Dépenses carte Monsieur (€)</label>
+                        <input type="number" id="depensesCarteMari" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Ex: 300" required>
+                    </div>
+                    <div>
+                        <label for="depensesCarteFemme" class="block text-sm font-medium text-slate-700 mb-1">Dépenses carte Madame (€)</label>
+                        <input type="number" id="depensesCarteFemme" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Ex: 250" required>
+                    </div>
+                     <div class="md:col-span-2">
+                        <label for="depensesCrecheFemme" class="block text-sm font-medium text-slate-700 mb-1">Dépenses Crèche (payées par Madame) (€)</label>
+                        <input type="number" id="depensesCrecheFemme" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Ex: 400" required>
+                    </div>
+                </div>
+            </fieldset>
+            
+            <fieldset class="border border-slate-300 p-4 rounded-lg">
+                <legend class="text-lg font-semibold text-slate-800 px-2">Dépenses & Objectifs Compte Commun</legend>
+                <div class="space-y-4 mt-2">
+                    <div>
+                        <label for="depensesFixesCommunes" class="block text-sm font-medium text-slate-700 mb-1">Dépenses fixes communes mensuelles (€)</label>
+                        <input type="number" id="depensesFixesCommunes" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" value="1900" placeholder="Ex: 1900" required>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="depensesCarteCommuneMari" class="block text-sm font-medium text-slate-700 mb-1">Dépenses carte commune Monsieur (€)</label>
+                            <input type="number" id="depensesCarteCommuneMari" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Ex: 100" required>
+                        </div>
+                        <div>
+                            <label for="depensesCarteCommuneFemme" class="block text-sm font-medium text-slate-700 mb-1">Dépenses carte commune Madame (€)</label>
+                            <input type="number" id="depensesCarteCommuneFemme" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" placeholder="Ex: 80" required>
+                        </div>
+                    </div>
+                     <div>
+                        <label for="objectifSoldeCommun" class="block text-sm font-medium text-slate-700 mb-1">Objectif solde minimum compte commun (€)</label>
+                        <input type="number" id="objectifSoldeCommun" step="0.01" class="mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50 p-2.5 text-sm" value="300" placeholder="Ex: 300" required>
+                        <p class="text-xs text-slate-500 mt-1">Fonds de roulement souhaité sur le compte commun.</p>
+                    </div>
+                </div>
+            </fieldset>
+            
+            <button type="submit" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-semibold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition duration-150 ease-in-out text-base">
+                Calculer les virements et soldes
+            </button>
+        </form>
+
+        <!-- Zone pour les onglets de résultats -->
+        <div id="resultsContainer" class="mt-6" style="display: none;">
+            <div class="flex border-b border-gray-200">
+                <button id="tabRecap" class="tab-button active" onclick="showTab('recap')">Récapitulatif & Actions</button>
+                <button id="tabDetails" class="tab-button" onclick="showTab('details')">Détail des Mouvements</button>
+            </div>
+
+            <div id="recapContent" class="tab-content">
+                <!-- Le contenu du récapitulatif sera injecté ici -->
+            </div>
+
+            <div id="detailsContent" class="tab-content" style="display: none;">
+                <!-- Le contenu des détails sera injecté ici -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fonction pour afficher l'onglet sélectionné
+        function showTab(tabName) {
+            document.getElementById('recapContent').style.display = tabName === 'recap' ? 'block' : 'none';
+            document.getElementById('detailsContent').style.display = tabName === 'details' ? 'block' : 'none';
+            document.getElementById('tabRecap').classList.toggle('active', tabName === 'recap');
+            document.getElementById('tabDetails').classList.toggle('active', tabName === 'details');
+        }
+
+        document.getElementById('transferForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Récupération des valeurs
+            const soldeActuelMari = parseFloat(document.getElementById('soldeActuelMari').value.replace(',', '.')) || 0;
+            const soldeActuelFemme = parseFloat(document.getElementById('soldeActuelFemme').value.replace(',', '.')) || 0;
+            const epargneAutoMari = parseFloat(document.getElementById('epargneAutoMari').value.replace(',', '.')) || 0;
+            const epargneAutoFemme = parseFloat(document.getElementById('epargneAutoFemme').value.replace(',', '.')) || 0;
+            
+            const salaireMari = parseFloat(document.getElementById('salaireMari').value.replace(',', '.')) || 0;
+            const salaireFemme = parseFloat(document.getElementById('salaireFemme').value.replace(',', '.')) || 0;
+            const depensesCarteMari = parseFloat(document.getElementById('depensesCarteMari').value.replace(',', '.')) || 0;
+            const depensesCarteFemme = parseFloat(document.getElementById('depensesCarteFemme').value.replace(',', '.')) || 0;
+            const depensesCrecheFemme = parseFloat(document.getElementById('depensesCrecheFemme').value.replace(',', '.')) || 0;
+            
+            const depensesFixesCommunes = parseFloat(document.getElementById('depensesFixesCommunes').value.replace(',', '.')) || 0;
+            const depensesCarteCommuneMari = parseFloat(document.getElementById('depensesCarteCommuneMari').value.replace(',', '.')) || 0;
+            const depensesCarteCommuneFemme = parseFloat(document.getElementById('depensesCarteCommuneFemme').value.replace(',', '.')) || 0;
+            const objectifSoldeCommun = parseFloat(document.getElementById('objectifSoldeCommun').value.replace(',', '.')) || 0;
+
+            const objectifSoldeIndividuelApresVirementInitial = 300; 
+            const fondsDeRoulementIndividuelFinal = 350; 
+            const remboursementCAF = 700; 
+
+            // Total des dépenses réelles sur le compte commun
+            const totalDepensesReellesCompteCommun = depensesFixesCommunes + depensesCarteCommuneMari + depensesCarteCommuneFemme;
+            // Total des besoins du compte commun (dépenses + objectif de solde)
+            const totalBesoinsCompteCommun = totalDepensesReellesCompteCommun + objectifSoldeCommun;
+
+            // Revenus restants après dépenses perso (cartes + crèche pour Mme + épargne auto)
+            const revenuRestantMariApresDepensesPerso = salaireMari - depensesCarteMari - epargneAutoMari;
+            const revenuRestantFemmeApresDepensesPerso = salaireFemme - depensesCarteFemme - depensesCrecheFemme - epargneAutoFemme;
+            const totalRevenuRestantApresDepensesPerso = revenuRestantMariApresDepensesPerso + revenuRestantFemmeApresDepensesPerso;
+
+            // Contributions au compte commun
+            let contributionMariCompteCommun = 0;
+            let contributionFemmeCompteCommun = 0;
+            if (totalRevenuRestantApresDepensesPerso > 0) {
+                const proportionMari = Math.max(0, revenuRestantMariApresDepensesPerso) / totalRevenuRestantApresDepensesPerso;
+                const proportionFemme = Math.max(0, revenuRestantFemmeApresDepensesPerso) / totalRevenuRestantApresDepensesPerso;
+                contributionMariCompteCommun = totalBesoinsCompteCommun * proportionMari;
+                contributionFemmeCompteCommun = totalBesoinsCompteCommun * proportionFemme;
+            } else if (totalBesoinsCompteCommun > 0) { 
+                contributionMariCompteCommun = totalBesoinsCompteCommun / 2;
+                contributionFemmeCompteCommun = totalBesoinsCompteCommun / 2;
+            }
+            contributionMariCompteCommun = Math.max(0, contributionMariCompteCommun);
+            contributionFemmeCompteCommun = Math.max(0, contributionFemmeCompteCommun);
+
+            // --- Compte de Monsieur ---
+            const fondsDisponiblesMari = soldeActuelMari + salaireMari;
+            const sortiesCourantesMari = depensesCarteMari + epargneAutoMari + contributionMariCompteCommun;
+            const soldeMariAvantAjustementLivret = fondsDisponiblesMari - sortiesCourantesMari;
+            
+            let virementInitialLivretMari = 0;
+            if (soldeMariAvantAjustementLivret < objectifSoldeIndividuelApresVirementInitial) {
+                virementInitialLivretMari = objectifSoldeIndividuelApresVirementInitial - soldeMariAvantAjustementLivret;
+            }
+            const soldeMariApresVirementInitialLivret = soldeMariAvantAjustementLivret + virementInitialLivretMari;
+
+            let retransfertLivretMari = 0;
+            if (soldeMariApresVirementInitialLivret > fondsDeRoulementIndividuelFinal) {
+                retransfertLivretMari = soldeMariApresVirementInitialLivret - fondsDeRoulementIndividuelFinal;
+            }
+            const soldeFinalMari = soldeMariApresVirementInitialLivret - retransfertLivretMari;
+
+            // --- Compte de Madame ---
+            const fondsDisponiblesFemme = soldeActuelFemme + salaireFemme;
+            const sortiesCourantesFemme = depensesCarteFemme + depensesCrecheFemme + epargneAutoFemme + contributionFemmeCompteCommun;
+            const soldeFemmeAvantAjustementLivret = fondsDisponiblesFemme - sortiesCourantesFemme;
+
+            let virementInitialLivretFemme = 0;
+            if (soldeFemmeAvantAjustementLivret < objectifSoldeIndividuelApresVirementInitial) {
+                virementInitialLivretFemme = objectifSoldeIndividuelApresVirementInitial - soldeFemmeAvantAjustementLivret;
+            }
+            const soldeFemmeApresVirementInitialLivret = soldeFemmeAvantAjustementLivret + virementInitialLivretFemme;
+            const soldeFemmeApresCAF = soldeFemmeApresVirementInitialLivret + remboursementCAF;
+
+            let retransfertLivretFemme = 0;
+            if (soldeFemmeApresCAF > fondsDeRoulementIndividuelFinal) {
+                retransfertLivretFemme = soldeFemmeApresCAF - fondsDeRoulementIndividuelFinal;
+            }
+            const soldeFinalFemme = soldeFemmeApresCAF - retransfertLivretFemme;
+            
+            // Solde final estimé du compte commun
+            const soldeFinalEstimeCompteCommun = (contributionMariCompteCommun + contributionFemmeCompteCommun) - totalDepensesReellesCompteCommun;
+
+            // Bilan simplifié (Revenus courants - Dépenses courantes)
+            const totalRevenusCourants = salaireMari + salaireFemme + remboursementCAF;
+            const totalDepensesCourantesReelles = depensesCarteMari + depensesCarteFemme + depensesCrecheFemme + totalDepensesReellesCompteCommun;
+            const bilanSimplifieMois = totalRevenusCourants - totalDepensesCourantesReelles;
+            const totalEpargneAutomatiquePlanifiee = epargneAutoMari + epargneAutoFemme;
+
+
+            // Affichage Récapitulatif
+            const recapContent = document.getElementById('recapContent');
+            let recapHTML = `<h2 class="text-xl font-semibold text-sky-800 mb-4 text-center">Récapitulatif et Recommandations Financières</h2>`;
+            recapHTML += `
+                <div class="result-section">
+                    <p class="text-lg font-medium text-slate-700 mb-2">📈 Contributions au Compte Commun (Actions à effectuer) :</p>
+                    <p class="text-sm text-slate-600 mb-1">Besoin total (dépenses ${totalDepensesReellesCompteCommun.toFixed(2).replace('.', ',')}€ + obj. solde ${objectifSoldeCommun.toFixed(2).replace('.', ',')}€) : <strong class="text-sky-700">${totalBesoinsCompteCommun.toFixed(2).replace('.', ',')} €</strong></p>
+                    <p><span class="result-label">Monsieur doit virer :</span> <span class="action-highlight result-value text-sky-600">${contributionMariCompteCommun.toFixed(2).replace('.', ',')} €</span></p>
+                    <p><span class="result-label">Madame doit virer :</span> <span class="action-highlight result-value text-sky-600">${contributionFemmeCompteCommun.toFixed(2).replace('.', ',')} €</span></p>
+                </div>`;
+            recapHTML += `<div class="result-section">
+                                <p class="text-lg font-medium text-slate-700 mb-2">👤 Compte de Monsieur :</p>
+                                <p><span class="result-label">Solde avant ajustement Livret :</span> <span class="result-value ${soldeMariAvantAjustementLivret >= 0 ? 'positive-value' : 'negative-value'}">${soldeMariAvantAjustementLivret.toFixed(2).replace('.', ',')} €</span> (après épargne auto. de ${epargneAutoMari.toFixed(2).replace('.',',')}€)</p>`;
+            if (virementInitialLivretMari > 0) {
+                recapHTML += `<p class="mt-1"><strong class="warning-value">Action :</strong> Virer <span class="action-highlight result-value warning-value">${virementInitialLivretMari.toFixed(2).replace('.', ',')} €</span> depuis Livret A pour atteindre ${objectifSoldeIndividuelApresVirementInitial.toFixed(2).replace('.',',')}€.</p>
+                                <p><span class="result-label">Solde après ce virement :</span> <span class="result-value positive-value">${soldeMariApresVirementInitialLivret.toFixed(2).replace('.', ',')} €</span></p>`;
+            }
+            if (retransfertLivretMari > 0) {
+                recapHTML += `<p class="mt-1"><strong class="info-value">Optimisation (Action) :</strong> Re-virer <span class="action-highlight result-value info-value">${retransfertLivretMari.toFixed(2).replace('.', ',')} €</span> vers Livret A pour maintenir ${fondsDeRoulementIndividuelFinal.toFixed(2).replace('.',',')}€ de fonds de roulement.</p>`;
+            }
+            recapHTML += `<p class="mt-1"><span class="result-label">Solde final Monsieur (après toutes opérations) :</span> <span class="result-value ${soldeFinalMari >= 0 ? 'positive-value' : 'negative-value'}">${soldeFinalMari.toFixed(2).replace('.', ',')} €</span></p>
+                           </div>`;
+            recapHTML += `<div class="result-section">
+                                <p class="text-lg font-medium text-slate-700 mb-2">👩‍🦰 Compte de Madame :</p>
+                                <p><span class="result-label">Solde avant ajustement Livret :</span> <span class="result-value ${soldeFemmeAvantAjustementLivret >= 0 ? 'positive-value' : 'negative-value'}">${soldeFemmeAvantAjustementLivret.toFixed(2).replace('.', ',')} €</span> (après épargne auto. de ${epargneAutoFemme.toFixed(2).replace('.',',')}€ et crèche)</p>`;
+            if (virementInitialLivretFemme > 0) {
+                recapHTML += `<p class="mt-1"><strong class="warning-value">Action :</strong> Virer <span class="action-highlight result-value warning-value">${virementInitialLivretFemme.toFixed(2).replace('.', ',')} €</span> depuis Livret A pour atteindre ${objectifSoldeIndividuelApresVirementInitial.toFixed(2).replace('.',',')}€.</p>
+                                <p><span class="result-label">Solde après ce virement :</span> <span class="result-value positive-value">${soldeFemmeApresVirementInitialLivret.toFixed(2).replace('.', ',')} €</span></p>`;
+            }
+            recapHTML += `<p class="mt-1"><span class="result-label">Solde après remboursement CAF anticipé (+${remboursementCAF}€) :</span> <span class="result-value positive-value">${soldeFemmeApresCAF.toFixed(2).replace('.', ',')} €</span></p>`;
+            if (retransfertLivretFemme > 0) {
+                recapHTML += `<p class="mt-1"><strong class="info-value">Optimisation (Action) :</strong> Re-virer <span class="action-highlight result-value info-value">${retransfertLivretFemme.toFixed(2).replace('.', ',')} €</span> vers Livret A pour maintenir ${fondsDeRoulementIndividuelFinal.toFixed(2).replace('.',',')}€ de fonds de roulement.</p>`;
+            }
+            recapHTML += `<p class="mt-1"><span class="result-label">Solde final Madame (après toutes opérations) :</span> <span class="result-value ${soldeFinalFemme >= 0 ? 'positive-value' : 'negative-value'}">${soldeFinalFemme.toFixed(2).replace('.', ',')} €</span></p>
+                           </div>`;
+            recapHTML += `
+                <div class="result-section">
+                    <p class="text-lg font-medium text-slate-700 mb-2">💰 Solde Estimé Fin de Mois (Compte Commun) :</p>
+                    <p><span class="result-label">Solde final compte commun :</span> <span class="result-value ${soldeFinalEstimeCompteCommun >= objectifSoldeCommun - 0.01 ? 'positive-value' : 'warning-value'}">${soldeFinalEstimeCompteCommun.toFixed(2).replace('.', ',')} €</span> (Objectif : ${objectifSoldeCommun.toFixed(2).replace('.',',')}€)</p>
+                </div>`;
+            
+            // Nouvelle section Bilan Simplifié
+            recapHTML += `
+                <div class="result-section">
+                    <p class="text-lg font-medium text-slate-700 mb-2">📊 Bilan Mensuel Simplifié (Flux Courants) :</p>
+                    <p><span class="result-label">Total revenus courants (Salaires + CAF) :</span> <span class="result-value positive-value">${totalRevenusCourants.toFixed(2).replace('.', ',')} €</span></p>
+                    <p><span class="result-label">Total dépenses courantes (Fixes + Variables) :</span> <span class="result-value negative-value">${totalDepensesCourantesReelles.toFixed(2).replace('.', ',')} €</span></p>
+                    <p><span class="result-label">Résultat net (Revenus courants - Dépenses courantes) :</span> <span class="result-value ${bilanSimplifieMois >= 0 ? 'positive-value' : 'negative-value'}">${bilanSimplifieMois.toFixed(2).replace('.', ',')} €</span></p>`;
+            if (bilanSimplifieMois > 0) {
+                recapHTML += `<p class="text-sm text-slate-600 mt-1">🎉 Excellent ! Vos revenus courants couvrent vos dépenses courantes avec un excédent de ${bilanSimplifieMois.toFixed(2).replace('.',',')}€.</p>`;
+            } else if (bilanSimplifieMois < 0) {
+                recapHTML += `<p class="text-sm text-slate-600 mt-1">⚠️ Attention : Vos dépenses courantes excèdent vos revenus courants de ${Math.abs(bilanSimplifieMois).toFixed(2).replace('.',',')}€. Ce déficit est couvert par vos soldes initiaux ou nécessite des ajustements.</p>`;
+            } else {
+                recapHTML += `<p class="text-sm text-slate-600 mt-1">👍 Vos revenus courants équilibrent parfaitement vos dépenses courantes ce mois-ci.</p>`;
+            }
+            recapHTML += `<p class="mt-2"><span class="result-label">Pour information, Épargne automatique planifiée totale :</span> <span class="result-value text-sky-700">${totalEpargneAutomatiquePlanifiee.toFixed(2).replace('.', ',')} €</span></p>`;
+            recapHTML += `</div>`;
+            recapContent.innerHTML = recapHTML;
+
+            // Affichage Détails des Mouvements
+            const detailsContent = document.getElementById('detailsContent');
+            let detailsHTML = `<h2 class="text-xl font-semibold text-sky-800 mb-4 text-center">Détail des Mouvements Financiers du Mois</h2>`;
+            
+            let totalEntreesDetails = salaireMari + salaireFemme + virementInitialLivretMari + virementInitialLivretFemme + remboursementCAF;
+            // Pour les sorties dans l'onglet détail, on veut le total de ce qui quitte réellement les comptes courants vers l'extérieur ou vers l'épargne.
+            let totalSortiesDetails = depensesCarteMari + epargneAutoMari + (retransfertLivretMari > 0 ? retransfertLivretMari : 0) +
+                                   depensesCarteFemme + depensesCrecheFemme + epargneAutoFemme + (retransfertLivretFemme > 0 ? retransfertLivretFemme : 0) +
+                                   totalDepensesReellesCompteCommun;
+
+
+            detailsHTML += `<div class="grid grid-cols-1 md:grid-cols-2 gap-6">`;
+            // Colonne Rentrées
+            detailsHTML += `<div><h3 class="text-lg font-semibold text-green-600 mb-2">(+) Rentrées d'Argent sur les Comptes : ${totalEntreesDetails.toFixed(2).replace('.',',')} €</h3>`;
+            detailsHTML += `<ul class="list-disc detail-list">`;
+            detailsHTML += `<li>Salaire Monsieur : ${salaireMari.toFixed(2).replace('.',',')} €</li>`;
+            detailsHTML += `<li>Salaire Madame : ${salaireFemme.toFixed(2).replace('.',',')} €</li>`;
+            if (virementInitialLivretMari > 0) detailsHTML += `<li>Virement depuis Livret A (Monsieur) : ${virementInitialLivretMari.toFixed(2).replace('.',',')} €</li>`;
+            if (virementInitialLivretFemme > 0) detailsHTML += `<li>Virement depuis Livret A (Madame) : ${virementInitialLivretFemme.toFixed(2).replace('.',',')} €</li>`;
+            if (remboursementCAF > 0) detailsHTML += `<li>Remboursement CAF (Madame) : ${remboursementCAF.toFixed(2).replace('.',',')} €</li>`;
+            detailsHTML += `</ul></div>`;
+
+            // Colonne Sorties
+            detailsHTML += `<div><h3 class="text-lg font-semibold text-red-600 mb-2">(-) Sorties d'Argent des Comptes : ${totalSortiesDetails.toFixed(2).replace('.',',')} €</h3>`;
+            
+            detailsHTML += `<p class="detail-title">Compte Monsieur :</p><ul class="list-disc detail-list">`;
+            detailsHTML += `<li>Dépenses carte : ${depensesCarteMari.toFixed(2).replace('.',',')} €</li>`;
+            detailsHTML += `<li>Épargne automatique : ${epargneAutoMari.toFixed(2).replace('.',',')} €</li>`;
+            detailsHTML += `<li>Contribution compte commun (virement) : ${contributionMariCompteCommun.toFixed(2).replace('.',',')} €</li>`;
+            if (retransfertLivretMari > 0) detailsHTML += `<li>Re-transfert vers Livret A : ${retransfertLivretMari.toFixed(2).replace('.',',')} €</li>`;
+            detailsHTML += `</ul>`;
+
+            detailsHTML += `<p class="detail-title">Compte Madame :</p><ul class="list-disc detail-list">`;
+            detailsHTML += `<li>Dépenses carte : ${depensesCarteFemme.toFixed(2).replace('.',',')} €</li>`;
+            detailsHTML += `<li>Dépenses crèche : ${depensesCrecheFemme.toFixed(2).replace('.',',')} €</li>`;
+            detailsHTML += `<li>Épargne automatique : ${epargneAutoFemme.toFixed(2).replace('.',',')} €</li>`;
+            detailsHTML += `<li>Contribution compte commun (virement) : ${contributionFemmeCompteCommun.toFixed(2).replace('.',',')} €</li>`;
+            if (retransfertLivretFemme > 0) detailsHTML += `<li>Re-transfert vers Livret A : ${retransfertLivretFemme.toFixed(2).replace('.',',')} €</li>`;
+            detailsHTML += `</ul>`;
+
+            detailsHTML += `<p class="detail-title">Compte Commun (Dépenses réelles payées) :</p><ul class="list-disc detail-list">`;
+            detailsHTML += `<li>Dépenses fixes : ${depensesFixesCommunes.toFixed(2).replace('.',',')} €</li>`;
+            detailsHTML += `<li>Dépenses carte commune Monsieur : ${depensesCarteCommuneMari.toFixed(2).replace('.',',')} €</li>`;
+            detailsHTML += `<li>Dépenses carte commune Madame : ${depensesCarteCommuneFemme.toFixed(2).replace('.',',')} €</li>`;
+            detailsHTML += `</ul>`;
+            detailsHTML += `</div></div>`; // Fin grid
+
+            detailsHTML += `<div class="result-section"><p class="text-lg font-medium text-slate-700">Variation nette des liquidités sur les comptes courants (hors épargne) : <span class="result-value ${ (soldeFinalMari + soldeFinalFemme + soldeFinalEstimeCompteCommun - (soldeActuelMari + soldeActuelFemme)) >=0 ? 'positive-value' : 'negative-value'}">${(soldeFinalMari + soldeFinalFemme + soldeFinalEstimeCompteCommun - (soldeActuelMari + soldeActuelFemme)).toFixed(2).replace('.',',')} €</span></p></div>`
+
+
+            detailsContent.innerHTML = detailsHTML;
+            
+            document.getElementById('resultsContainer').style.display = 'block';
+            showTab('recap'); // Afficher l'onglet récap par défaut
+        });
+    </script>
+
+</body>
+</html>
